@@ -13,6 +13,7 @@ function ciniki_classes_main() {
 			'ciniki_classes_main', 'menu',
 			'mc', 'medium', 'sectioned', 'ciniki.classes.main.menu');
         this.menu.sections = {
+			'info':{'label':'', 'list':{}},
 			'classes':{'label':'Classes', 'type':'simplegrid', 'num_cols':1,
 				'headerValues':null,
 				'dataMaps':['name'],
@@ -21,7 +22,10 @@ function ciniki_classes_main() {
 				'addFn':'M.startApp(\'ciniki.classes.class\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'class_id\':0});',
 				},
 			};
-		this.menu.sectionData = function(s) { return this.data[s]; }
+		this.menu.sectionData = function(s) { 
+			if( s == 'info' ) { return this.sections[s].list; }
+			return this.data[s]; 
+		};
 		this.menu.cellValue = function(s, i, j, d) {
 			return d.class[M.ciniki_classes_main.menu.sections[s].dataMaps[j]];
 		};
@@ -29,7 +33,7 @@ function ciniki_classes_main() {
 			return 'M.startApp(\'ciniki.classes.class\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'class_id\':\'' + d.class.id + '\'});';
 		};
 		this.menu.addButton('add', 'Add', 'M.startApp(\'ciniki.classes.class\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'class_id\':0});');
-		this.menu.addClose('Back');
+		this.menu.addClose('Cancel');
 	}
 
 	//
@@ -77,6 +81,19 @@ function ciniki_classes_main() {
 				}
 				var p = M.ciniki_classes_main.menu;
 				p.data = {'classes':rsp.classes};
+				p.sections.info.list['introduction'] = {'label':'Introduction',
+					'fn':'M.startApp(\'ciniki.classes.info\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'page\':\'introduction\',\'name\':\'Introduction\'});'};
+				// if subcats enabled, then display list of categories for info details
+				if( (M.curBusiness.modules['ciniki.classes'].flags&0x02) > 0 ) {
+					for(i in rsp.classes) {
+						if( rsp.classes[i].class.category_permalink == '' ) { continue; }
+						var cp = 'category-' + rsp.classes[i].class.category_permalink;
+						if( p.sections.info.list[cp] == null ) {
+							p.sections.info.list[cp] = {'label':rsp.classes[i].class.category,
+								'fn':'M.startApp(\'ciniki.classes.info\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'page\':\'' + cp + '\',\'name\':\'' + escape(rsp.classes[i].class.category) + '\'});'};
+						}
+					}
+				}
 				p.refresh();
 				p.show(cb);
 			});

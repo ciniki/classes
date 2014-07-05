@@ -20,6 +20,7 @@ function ciniki_classes_objects($ciniki) {
 			'name'=>array(),
 			'permalink'=>array(),
 			'category'=>array(),
+			'category_permalink'=>array(),
 			'subcat'=>array(),
 			'primary_image_id'=>array('ref'=>'ciniki.images.image'),
 			'webflags'=>array(),

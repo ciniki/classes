@@ -40,7 +40,7 @@ function ciniki_classes_classList(&$ciniki) {
 	// Get the existing details
 	//
 	$strsql = "SELECT id, "
-		. "category, subcat, name "
+		. "category, category_permalink, subcat, name "
 		. "FROM ciniki_classes "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 		. "";
@@ -52,7 +52,7 @@ function ciniki_classes_classList(&$ciniki) {
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
 	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.classes', array(
 		array('container'=>'classes', 'fname'=>'id', 'name'=>'class',
-			'fields'=>array('id', 'category', 'subcat', 'name')),
+			'fields'=>array('id', 'category', 'category_permalink', 'subcat', 'name')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;

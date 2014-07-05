@@ -29,6 +29,7 @@ function ciniki_classes_classAdd(&$ciniki) {
 		'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'), 
 		'permalink'=>array('required'=>'no', 'blank'=>'no', 'default'=>'', 'name'=>'Permalink'), 
 		'category'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Category'), 
+		'category_permalink'=>array('required'=>'no', 'blank'=>'no', 'default'=>'', 'name'=>'Category Permalink'), 
 		'subcat'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Sub-Category'), 
 		'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'0', 'name'=>'Image'), 
 		'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Options'), 
@@ -41,11 +42,6 @@ function ciniki_classes_classAdd(&$ciniki) {
 	}
 	$args = $rc['args'];
 	
-	if( !isset($args['permalink']) || $args['permalink'] == '' ) {	
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
-		$args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
-	}
-
 	//
 	// Check access to business_id as owner
 	//
@@ -55,11 +51,16 @@ function ciniki_classes_classAdd(&$ciniki) {
 		return $ac;
 	}
 
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
+	if( !isset($args['category_permalink']) || $args['category_permalink'] == '' ) {	
+		// This permalink will have duplicates.
+		$args['category_permalink'] = ciniki_core_makePermalink($ciniki, $args['category']);
+	}
+
 	if( !isset($args['permalink']) || $args['permalink'] == '' ) {
 		$permalink = $args['category'];
 		$permalink .= ($permalink!=''?'-':'') . $args['subcat'];
 		$permalink .= ($permalink!=''?'-':'') . $args['name'];
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
 		$args['permalink'] = ciniki_core_makePermalink($ciniki, $permalink);
 	}
 

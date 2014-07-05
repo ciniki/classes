@@ -25,6 +25,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
 		'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'), 
 		'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'), 
 		'category'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Category'), 
+		'category_permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Category Permalink'), 
 		'subcat'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sub-Category'), 
 		'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image'), 
 		'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Options'), 
@@ -49,7 +50,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
 	//
 	// Get the existing details
 	//
-	$strsql = "SELECT id, uuid, category, subcat, name, primary_image_id "
+	$strsql = "SELECT id, uuid, category, category_permalink, subcat, name, primary_image_id "
 		. "FROM ciniki_classes "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 		. "AND id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
@@ -66,6 +67,11 @@ function ciniki_classes_classUpdate(&$ciniki) {
 	//
 	// Check if the permalink needs rebuilding
 	//
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
+	if( isset($args['category']) ) {
+		// This permalink will have duplicates.
+		$args['category_permalink'] = ciniki_core_makePermalink($ciniki, $args['category']);
+	}
 	if( isset($args['category']) || isset($args['subcat']) || isset($args['name']) ) {
 		$permalink = '';
 		if( isset($args['category']) ) {
@@ -90,7 +96,6 @@ function ciniki_classes_classUpdate(&$ciniki) {
 			$permalink .= ($permalink!=''?'-':'') . $item['name'];
 		}
 
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
 		$args['permalink'] = ciniki_core_makePermalink($ciniki, $permalink);
 
 		//
