@@ -78,8 +78,9 @@ function ciniki_classes_info() {
 	};
 
 	this.saveInfo = function() {
-		var c = this.edit.serializeFormData('no');
-
+		var c = this.edit.serializeForm('no');
+	
+		console.log(c);
 		if( c != '' ) {
 			M.api.postJSONFormData('ciniki.classes.settingsUpdate', 
 				{'business_id':M.curBusinessID}, c, function(rsp) {

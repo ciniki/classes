@@ -85,6 +85,7 @@ function ciniki_classes_main() {
 					'fn':'M.startApp(\'ciniki.classes.info\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'page\':\'introduction\',\'name\':\'Introduction\'});'};
 				// if subcats enabled, then display list of categories for info details
 				if( (M.curBusiness.modules['ciniki.classes'].flags&0x02) > 0 ) {
+					p.sections.info.label = 'Category Descriptions';
 					for(i in rsp.classes) {
 						if( rsp.classes[i].class.category_permalink == '' ) { continue; }
 						var cp = 'category-' + rsp.classes[i].class.category_permalink;
@@ -93,6 +94,8 @@ function ciniki_classes_main() {
 								'fn':'M.startApp(\'ciniki.classes.info\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'page\':\'' + cp + '\',\'name\':\'' + escape(rsp.classes[i].class.category) + '\'});'};
 						}
 					}
+				} else {
+					p.sections.info.label = '';
 				}
 				p.refresh();
 				p.show(cb);

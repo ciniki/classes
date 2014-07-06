@@ -34,6 +34,7 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
 		. "AND ciniki_classes.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
 		. "AND (ciniki_classes.webflags&0x01) > 0 "
 		. "";
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.classes', array(
 		array('container'=>'classes', 'fname'=>'id',
 			'fields'=>array('id', 'name', 'permalink', 'category', 'category_permalink', 'subcat',
@@ -51,15 +52,15 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
 	// Get the images for the class
 	//
 	$strsql = "SELECT id, image_id, name, permalink, description, "
-		. "UNIX_TIMESTAMP(ciniki_event_images.last_updated) AS image_last_updated "
+		. "UNIX_TIMESTAMP(ciniki_class_images.last_updated) AS image_last_updated "
 		. "FROM ciniki_class_images "
-		. "WHERE ciniki_class_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-		. "AND ciniki_class_files.class_id = '" . ciniki_core_dbQuote($ciniki, $class['id']) . "' "
+		. "WHERE ciniki_class_images.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+		. "AND ciniki_class_images.class_id = '" . ciniki_core_dbQuote($ciniki, $class['id']) . "' "
 		. "";
-	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.class', array(
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.classes', array(
 		array('container'=>'images', 'fname'=>'id', 
 			'fields'=>array('id', 'image_id', 'title'=>'name', 'permalink', 
-				'description', 'last_updated')),
+				'description', 'last_updated'=>'image_last_updated')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
@@ -77,7 +78,7 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
 		. "WHERE ciniki_class_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND ciniki_class_files.class_id = '" . ciniki_core_dbQuote($ciniki, $class['id']) . "' "
 		. "";
-	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.class', array(
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.classes', array(
 		array('container'=>'files', 'fname'=>'id', 
 			'fields'=>array('id', 'name', 'extension', 'permalink', 'description')),
 		));
@@ -88,6 +89,6 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
 		$class['files'] = $rc['files'];
 	}
 
-	return array('stat'=>'ok', 'info'=>$info);
+	return array('stat'=>'ok', 'class'=>$class);
 }
 ?>

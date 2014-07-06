@@ -14,7 +14,7 @@
 // Returns
 // -------
 //
-function ciniki_classes_web_categoryList($ciniki, $settings, $business_id, $type, $blogtype) {
+function ciniki_classes_web_categoryList($ciniki, $settings, $business_id) {
 
 	//
 	// Build the query to get the categories
@@ -31,12 +31,12 @@ function ciniki_classes_web_categoryList($ciniki, $settings, $business_id, $type
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.classes', array(
 		array('container'=>'categories', 'fname'=>'category_permalink', 
-			'fields'=>array('category', 'permalink'=>'category_permalink')),
+			'fields'=>array('name'=>'category', 'permalink'=>'category_permalink')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
 	}
-	if( isset($rc['tags']) ) {
+	if( isset($rc['categories']) ) {
 		$categories = $rc['categories'];
 	} else {
 		$categories = array();

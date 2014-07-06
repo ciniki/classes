@@ -69,8 +69,9 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
 	// Check each argument passed to see if it matches an allowed settings string
 	//
 	foreach($ciniki['request']['args'] as $field => $fvalue) {
+		error_log($field);
 		if( preg_match('/classes-.*-(content|image-id|image-caption|image-url)/', $field, $matches) ) {
-			if( $matches[1] == 'image-id' && $fvalue == 'undefined' || $fvalue == '' ) { continue; }
+			if( $matches[1] == 'image-id' && ($fvalue == 'undefined' || $fvalue == '') ) { continue; }
 			//
 			// Add the settings if they don't already exist
 			//

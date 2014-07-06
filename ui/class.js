@@ -181,6 +181,8 @@ function ciniki_classes_class() {
 	this.editClass = function(cb, cid) {
 		this.edit.reset();
 		if( cid != null ) { this.edit.class_id = cid; }
+		this.edit.sections.details.fields.category.active = ((M.curBusiness.modules['ciniki.classes'].flags&0x01)>0)?'yes':'no';
+		this.edit.sections.details.fields.subcat.active = ((M.curBusiness.modules['ciniki.classes'].flags&0x02)>0)?'yes':'no';
 		if( this.edit.class_id > 0 ) {
 			this.edit.sections._buttons.buttons.delete.visible = 'yes';
 			M.api.getJSONCb('ciniki.classes.classGet', {'business_id':M.curBusinessID, 
