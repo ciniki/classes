@@ -30,7 +30,7 @@ function ciniki_classes_class() {
 					'deleteImage':'M.ciniki_classes_class.edit.deletePrimaryImage',
 					},
 			}},
-            'details':{'label':'', 'fields':{
+            'details':{'label':'', 'aside':'yes', 'fields':{
                 'name':{'label':'Title', 'hint':'Title', 'type':'text'},
                 'category':{'label':'Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
                 'subcat':{'label':'Sub-Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
