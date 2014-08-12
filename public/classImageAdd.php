@@ -35,7 +35,7 @@ function ciniki_classes_classImageAdd(&$ciniki) {
     // check permission to run this function for this business
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.imageAdd'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classImageAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     } 

@@ -32,7 +32,7 @@ function ciniki_classes_settingsGet($ciniki) {
     // check permission to run this function for this business
     //  
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.class.settingsGet'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.settingsGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
