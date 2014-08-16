@@ -102,7 +102,6 @@ function ciniki_classes_class() {
 				// Save the class
 				var c = M.ciniki_classes_class.edit.serializeForm('yes');
 				c += '&images=' + iid;
-				console.log(c);
 				var rsp = M.api.postJSON('ciniki.classes.classAdd', {'business_id':M.curBusinessID}, c);
 				if( rsp.stat != 'ok' ) {
 					M.api.err(rsp);
