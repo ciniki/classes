@@ -13,7 +13,9 @@
 # permalink:		The permalink is made up of category-subcat-name depending on what is 
 #					enabled in the module.
 # category:			The category for the class.
+# category_permalink:	The permalink for the URL to open the category.
 # subcat:			The sub-category for the class.
+# primary_image_id:	The ID of the image to use for class listings and on the main class page.
 # webflags:			The flags for displaying on the 
 #
 # synopsis:			The 2 sentence overview of the class.
