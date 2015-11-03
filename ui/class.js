@@ -19,7 +19,7 @@ function ciniki_classes_class() {
 		this.edit.class_id = 0;
 		this.edit.additional_images = [];
         this.edit.sections = { 
-			'_image':{'label':'', 'aside':'yes', 'fields':{
+			'_image':{'label':'', 'aside':'yes', 'type':'imageform', 'fields':{
 				'primary_image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 
 					'controls':'all', 'history':'no',
 					'addDropImage':function(iid) {

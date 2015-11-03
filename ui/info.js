@@ -55,7 +55,7 @@ function ciniki_classes_info() {
 				var p = M.ciniki_classes_info.edit;
 				p.data = rsp.settings;
 				p.sections = {
-					'_image':{'label':'', 'aside':'yes', 'fields':{}},
+					'_image':{'label':'', 'aside':'yes', 'type':'imageform', 'fields':{}},
 					'_caption':{'label':'', 'aside':'yes', 'fields':{}},
 					'_content':{'label':'More information', 'type':'simpleform', 'fields':{}},
 					'_buttons':{'label':'', 'buttons':{
