@@ -63,7 +63,7 @@ function ciniki_classes_classImageGet($ciniki) {
         return $rc;
     }
     if( !isset($rc['images']) ) {
-        return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'1782', 'msg'=>'Unable to find image'));
+        return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.classes.22', 'msg'=>'Unable to find image'));
     }
     $image = $rc['images'][0]['image'];
     

@@ -60,7 +60,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1769', 'msg'=>'Class not found'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.26', 'msg'=>'Class not found'));
     }
     $item = $rc['item'];
 
@@ -112,7 +112,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1787', 'msg'=>'You already have an class with this name, please choose another name'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.27', 'msg'=>'You already have an class with this name, please choose another name'));
         }
     }
 

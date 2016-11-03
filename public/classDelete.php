@@ -48,7 +48,7 @@ function ciniki_classes_classDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1785', 'msg'=>'Class does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.6', 'msg'=>'Class does not exist'));
     }
     $class_uuid = $rc['item']['uuid'];
 

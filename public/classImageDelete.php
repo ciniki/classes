@@ -46,7 +46,7 @@ function ciniki_classes_classImageDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1781', 'msg'=>'Class image does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.21', 'msg'=>'Class image does not exist'));
     }
     $item = $rc['item'];
 

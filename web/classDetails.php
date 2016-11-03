@@ -44,7 +44,7 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
         return $rc;
     }
     if( !isset($rc['classes']) || count($rc['classes']) < 1 ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'1814', 'msg'=>"I'm sorry, but we can't find the class you requested."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.classes.28', 'msg'=>"I'm sorry, but we can't find the class you requested."));
     }
     $class = array_pop($rc['classes']);
 

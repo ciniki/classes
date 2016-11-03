@@ -63,7 +63,7 @@ function ciniki_classes_classSearchField($ciniki) {
     if( $args['field'] != 'category'
         && $args['field'] != 'subcat'
         ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1807', 'msg'=>'Unvalid search field'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.25', 'msg'=>'Unvalid search field'));
     }
     //
     // Get the number of faqs in each status for the business, 

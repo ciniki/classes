@@ -77,7 +77,7 @@ function ciniki_classes_classAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1774', 'msg'=>'You already have an class with this name, please choose another name'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.4', 'msg'=>'You already have an class with this name, please choose another name'));
     }
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionStart');
@@ -122,7 +122,7 @@ function ciniki_classes_classAdd(&$ciniki) {
             ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
             $rc = ciniki_core_dbUUID($ciniki, 'ciniki.classes');
             if( $rc['stat'] != 'ok' ) {
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1806', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.classes.5', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
             }
             $i_args['uuid'] = $rc['uuid'];
             $i_args['permalink'] = $rc['uuid'];
