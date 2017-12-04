@@ -8,20 +8,20 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 //
 // Returns
 // -------
 //
-function ciniki_classes_web_pageInfo($ciniki, $settings, $business_id, $permalink) {
+function ciniki_classes_web_pageInfo($ciniki, $settings, $tnid, $permalink) {
 
     //
     // Build the query to get the categories
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQueryDash');
-    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_class_settings', 'business_id', 
-        $business_id, 'ciniki.classes', 'settings', 'classes-' . $permalink);
+    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_class_settings', 'tnid', 
+        $tnid, 'ciniki.classes', 'settings', 'classes-' . $permalink);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -34,7 +34,7 @@ function ciniki_classes_web_pageInfo($ciniki, $settings, $business_id, $permalin
     if( preg_match("/^category-(.*)$/", $permalink, $m) ) {
         $strsql = "SELECT category "
             . "FROM ciniki_classes "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND category_permalink = '" . ciniki_core_dbQuote($ciniki, $m[1]) . "' "
             . "LIMIT 1 "
             . "";

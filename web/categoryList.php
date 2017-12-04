@@ -8,20 +8,20 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 //
 // Returns
 // -------
 //
-function ciniki_classes_web_categoryList($ciniki, $settings, $business_id) {
+function ciniki_classes_web_categoryList($ciniki, $settings, $tnid) {
 
     //
     // Build the query to get the categories
     //
     $strsql = "SELECT DISTINCT category, category_permalink "
         . "FROM ciniki_classes "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND (webflags&0x01) > 0 "
         . "ORDER BY category "
         . "";

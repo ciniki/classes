@@ -15,7 +15,7 @@ function ciniki_classes_info() {
         this.edit.sectionData = function(s) { return this.data[s]; };
         this.edit.fieldHistoryArgs = function(s, i) {
             return {'method':'ciniki.classes.settingsHistory', 
-                'args':{'business_id':M.curBusinessID, 'setting':i}};
+                'args':{'tnid':M.curTenantID, 'setting':i}};
         }
         this.edit.deleteImage = function(fid) {
             this.setFieldValue(fid, 0, null, null);
@@ -46,7 +46,7 @@ function ciniki_classes_info() {
         if( page != null ) { this.edit.page_permalink = page; }
         if( name != null ) { this.edit.title = name; }
         
-        M.api.getJSONCb('ciniki.classes.settingsGet', {'business_id':M.curBusinessID, 
+        M.api.getJSONCb('ciniki.classes.settingsGet', {'tnid':M.curTenantID, 
             'page':this.edit.page_permalink}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
@@ -82,7 +82,7 @@ function ciniki_classes_info() {
     
         if( c != '' ) {
             M.api.postJSONFormData('ciniki.classes.settingsUpdate', 
-                {'business_id':M.curBusinessID}, c, function(rsp) {
+                {'tnid':M.curTenantID}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;

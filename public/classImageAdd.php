@@ -16,7 +16,7 @@ function ciniki_classes_classImageAdd(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'class_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Class'), 
         'name'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Title'), 
         'permalink'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Permalink'), 
@@ -32,10 +32,10 @@ function ciniki_classes_classImageAdd(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classImageAdd'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.classImageAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     } 
@@ -66,7 +66,7 @@ function ciniki_classes_classImageAdd(&$ciniki) {
     // Check the permalink doesn't already exist
     //
     $strsql = "SELECT id, name, permalink FROM ciniki_class_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND class_id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
         . "";
@@ -87,6 +87,6 @@ function ciniki_classes_classImageAdd(&$ciniki) {
     // Add the class image to the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-    return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.classes.class_image', $args, 0x07);
+    return ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.classes.class_image', $args, 0x07);
 }
 ?>

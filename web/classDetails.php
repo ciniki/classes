@@ -8,13 +8,13 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get class from.
+// tnid:     The ID of the tenant to get class from.
 //
 //
 // Returns
 // -------
 //
-function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $permalink) {
+function ciniki_classes_web_classDetails($ciniki, $settings, $tnid, $permalink) {
 
     //
     // Build the query
@@ -30,7 +30,7 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
         . "ciniki_classes.synopsis, "
         . "ciniki_classes.description "
         . "FROM ciniki_classes "
-        . "WHERE ciniki_classes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_classes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_classes.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
         . "AND (ciniki_classes.webflags&0x01) > 0 "
         . "";
@@ -54,7 +54,7 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
     $strsql = "SELECT id, image_id, name, permalink, description, "
         . "UNIX_TIMESTAMP(ciniki_class_images.last_updated) AS image_last_updated "
         . "FROM ciniki_class_images "
-        . "WHERE ciniki_class_images.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_class_images.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_class_images.class_id = '" . ciniki_core_dbQuote($ciniki, $class['id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.classes', array(
@@ -75,7 +75,7 @@ function ciniki_classes_web_classDetails($ciniki, $settings, $business_id, $perm
     //
     $strsql = "SELECT id, name, extension, permalink, description "
         . "FROM ciniki_class_files "
-        . "WHERE ciniki_class_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_class_files.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_class_files.class_id = '" . ciniki_core_dbQuote($ciniki, $class['id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.classes', array(

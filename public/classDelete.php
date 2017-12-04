@@ -16,7 +16,7 @@ function ciniki_classes_classDelete(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'class_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Class'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
@@ -26,10 +26,10 @@ function ciniki_classes_classDelete(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classDelete'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.classDelete'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -40,7 +40,7 @@ function ciniki_classes_classDelete(&$ciniki) {
     // Get the existing class information
     //
     $strsql = "SELECT id, uuid FROM ciniki_classes "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.classes', 'item');
@@ -71,7 +71,7 @@ function ciniki_classes_classDelete(&$ciniki) {
     //
     $strsql = "SELECT id, uuid, image_id "
         . "FROM ciniki_class_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND class_id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.classes', 'image');
@@ -83,7 +83,7 @@ function ciniki_classes_classDelete(&$ciniki) {
         $images = $rc['rows'];
         
         foreach($images as $iid => $image) {
-            $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.classes.class_image', 
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.classes.class_image', 
                 $image['id'], $image['uuid'], 0x04);
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.classes');
@@ -97,7 +97,7 @@ function ciniki_classes_classDelete(&$ciniki) {
     //
     $strsql = "SELECT id, uuid "
         . "FROM ciniki_class_files "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND class_id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.classes', 'file');
@@ -108,7 +108,7 @@ function ciniki_classes_classDelete(&$ciniki) {
     if( isset($rc['rows']) && count($rc['rows']) > 0 ) {
         $files = $rc['rows'];
         foreach($files as $fid => $file) {
-            $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.classes.file', 
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.classes.file', 
                 $file['id'], $file['uuid'], 0x04);
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.classes');
@@ -120,7 +120,7 @@ function ciniki_classes_classDelete(&$ciniki) {
     //
     // Remove the class
     //
-    $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.classes.class', 
+    $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.classes.class', 
         $args['class_id'], $class_uuid, 0x04);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.classes');
@@ -136,11 +136,11 @@ function ciniki_classes_classDelete(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'classes');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'classes');
 
     return array('stat'=>'ok');
 }

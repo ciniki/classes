@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the file to.
+// tnid:         The ID of the tenant to add the file to.
 // class_id:            The ID of the class the file is attached to.
 // name:                The name of the file.
 // description:         (optional) The extended description of the file, can be much longer than the name.
@@ -27,7 +27,7 @@ function ciniki_classes_classFileAdd(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'class_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Event'),
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'), 
         'description'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Description'), 
@@ -44,10 +44,10 @@ function ciniki_classes_classFileAdd(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classFileAdd'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.classFileAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -56,7 +56,7 @@ function ciniki_classes_classFileAdd(&$ciniki) {
     // Check the permalink doesn't already exist
     //
     $strsql = "SELECT id, name, permalink FROM ciniki_class_files "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND class_id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
         . "";
@@ -98,6 +98,6 @@ function ciniki_classes_classFileAdd(&$ciniki) {
     // Add the file to the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-    return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.classes.class_file', $args, 0x07);
+    return ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.classes.class_file', $args, 0x07);
 }
 ?>

@@ -1,5 +1,5 @@
 //
-// This app will handle the listing, additions and deletions of classes.  These are associated business.
+// This app will handle the listing, additions and deletions of classes.  These are associated tenant.
 //
 function ciniki_classes_main() {
     //
@@ -54,11 +54,11 @@ function ciniki_classes_main() {
             return false;
         } 
 
-        if( (M.curBusiness.modules['ciniki.classes'].flags&0x02) > 0 ) {
+        if( (M.curTenant.modules['ciniki.classes'].flags&0x02) > 0 ) {
             this.menu.sections.classes.num_cols = 3;
             this.menu.sections.classes.headerValues = ['Category', 'Sub-Category', 'Name'];
             this.menu.sections.classes.dataMaps = ['category', 'subcat', 'name'];
-        } else if( (M.curBusiness.modules['ciniki.classes'].flags&0x01) > 0 ) {
+        } else if( (M.curTenant.modules['ciniki.classes'].flags&0x01) > 0 ) {
             this.menu.sections.classes.num_cols = 2;
             this.menu.sections.classes.headerValues = ['Category', 'Name'];
             this.menu.sections.classes.dataMaps = ['category', 'name'];
@@ -74,7 +74,7 @@ function ciniki_classes_main() {
     this.showMenu = function(cb) {
         this.menu.data = {};
         M.api.getJSONCb('ciniki.classes.classList', 
-            {'business_id':M.curBusinessID}, function(rsp) {
+            {'tnid':M.curTenantID}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -84,7 +84,7 @@ function ciniki_classes_main() {
                 p.sections.info.list['introduction'] = {'label':'Introduction',
                     'fn':'M.startApp(\'ciniki.classes.info\',null,\'M.ciniki_classes_main.showMenu();\',\'mc\',{\'page\':\'introduction\',\'name\':\'Introduction\'});'};
                 // if subcats enabled, then display list of categories for info details
-                if( (M.curBusiness.modules['ciniki.classes'].flags&0x02) > 0 ) {
+                if( (M.curTenant.modules['ciniki.classes'].flags&0x02) > 0 ) {
                     p.sections.info.label = 'Category Descriptions';
                     for(i in rsp.classes) {
                         if( rsp.classes[i].class.category_permalink == '' ) { continue; }

@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the class to.
+// tnid:         The ID of the tenant to add the class to.
 // class_id:            The ID of the class to get.
 //
 // Returns
@@ -19,7 +19,7 @@ function ciniki_classes_classGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'class_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Class'),
         'images'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Images'),
         'files'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Files'),
@@ -31,10 +31,10 @@ function ciniki_classes_classGet($ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classGet'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.classGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -56,7 +56,7 @@ function ciniki_classes_classGet($ciniki) {
         . "ciniki_classes.synopsis, "
         . "ciniki_classes.description "
         . "FROM ciniki_classes "
-        . "WHERE ciniki_classes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE ciniki_classes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND ciniki_classes.id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
@@ -80,7 +80,7 @@ function ciniki_classes_classGet($ciniki) {
         $strsql = "SELECT id, name, image_id, webflags "
             . "FROM ciniki_class_images "
             . "WHERE class_id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
-            . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "";
         $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.info', array(
             array('container'=>'images', 'fname'=>'id', 'name'=>'image',
@@ -94,7 +94,7 @@ function ciniki_classes_classGet($ciniki) {
             ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheThumbnail');
             foreach($class['images'] as $inum => $img) {
                 if( isset($img['image']['image_id']) && $img['image']['image_id'] > 0 ) {
-                    $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], 
+                    $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], 
                         $img['image']['image_id'], 75);
                     if( $rc['stat'] != 'ok' ) {
                         return $rc;
@@ -111,7 +111,7 @@ function ciniki_classes_classGet($ciniki) {
     if( isset($args['files']) && $args['files'] == 'yes' ) {
         $strsql = "SELECT id, name, extension, permalink "
             . "FROM ciniki_class_files "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_class_files.class_id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
             . "";
         $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.classes', array(

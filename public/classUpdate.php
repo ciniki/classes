@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the class image to.
+// tnid:         The ID of the tenant to add the class image to.
 // name:                The name of the image.  
 //
 // Returns
@@ -20,7 +20,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'class_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Class'), 
         'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'), 
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'), 
@@ -39,10 +39,10 @@ function ciniki_classes_classUpdate(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classUpdate'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.classUpdate'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }
@@ -52,7 +52,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
     //
     $strsql = "SELECT id, uuid, category, category_permalink, subcat, name, primary_image_id "
         . "FROM ciniki_classes "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.classes', 'item');
@@ -103,7 +103,7 @@ function ciniki_classes_classUpdate(&$ciniki) {
         //
         $strsql = "SELECT id, name, permalink "
             . "FROM ciniki_classes "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
             . "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['class_id']) . "' "
             . "";
@@ -120,6 +120,6 @@ function ciniki_classes_classUpdate(&$ciniki) {
     // Update the class in the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-    return ciniki_core_objectUpdate($ciniki, $args['business_id'], 'ciniki.classes.class', $args['class_id'], $args);
+    return ciniki_core_objectUpdate($ciniki, $args['tnid'], 'ciniki.classes.class', $args['class_id'], $args);
 }
 ?>

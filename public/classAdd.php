@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method will add a new class for the business.
+// This method will add a new class for the tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to add the class to.
+// tnid:     The ID of the tenant to add the class to.
 // name:            The name of the class.
 // url:             (optional) The URL for the class website.
 // description:     (optional) The description for the class.
@@ -25,7 +25,7 @@ function ciniki_classes_classAdd(&$ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'), 
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'default'=>'', 'name'=>'Permalink'), 
         'category'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Category'), 
@@ -43,10 +43,10 @@ function ciniki_classes_classAdd(&$ciniki) {
     $args = $rc['args'];
     
     //
-    // Check access to business_id as owner
+    // Check access to tnid as owner
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $ac = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.classAdd');
+    $ac = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.classAdd');
     if( $ac['stat'] != 'ok' ) {
         return $ac;
     }
@@ -68,7 +68,7 @@ function ciniki_classes_classAdd(&$ciniki) {
     // Check the permalink doesn't already exist
     //
     $strsql = "SELECT id FROM ciniki_classes "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' " 
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' " 
         . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
         . "AND category = '" . ciniki_core_dbQuote($ciniki, $args['category']) . "' "
         . "";
@@ -93,7 +93,7 @@ function ciniki_classes_classAdd(&$ciniki) {
     // Add the class to the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-    $rc = ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.classes.class', $args, 0x04);
+    $rc = ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.classes.class', $args, 0x04);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -127,7 +127,7 @@ function ciniki_classes_classAdd(&$ciniki) {
             $i_args['uuid'] = $rc['uuid'];
             $i_args['permalink'] = $rc['uuid'];
 
-            $rc = ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.classes.class_image', $i_args, 0x04);
+            $rc = ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.classes.class_image', $i_args, 0x04);
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
             }
@@ -144,11 +144,11 @@ function ciniki_classes_classAdd(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'classes');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'classes');
 
     return $rsp;
 }

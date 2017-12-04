@@ -56,7 +56,7 @@ function ciniki_classes_class() {
         this.edit.fieldValue = function(s, i, d) { return this.data[i]; }
         this.edit.liveSearchCb = function(s, i, value) {
             if( i == 'category' || i == 'subcat' ) {
-                var rsp = M.api.getJSONBgCb('ciniki.classes.classSearchField', {'business_id':M.curBusinessID, 'field':i, 'start_needle':value, 'limit':15},
+                var rsp = M.api.getJSONBgCb('ciniki.classes.classSearchField', {'tnid':M.curTenantID, 'field':i, 'start_needle':value, 'limit':15},
                     function(rsp) {
                         M.ciniki_classes_class.edit.liveSearchShow(s, i, M.gE(M.ciniki_classes_class.edit.panelUID + '_' + i), rsp.results);
                     });
@@ -76,7 +76,7 @@ function ciniki_classes_class() {
             this.removeLiveSearch(s, fid);
         };
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.classes.classHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.classes.classHistory', 'args':{'tnid':M.curTenantID, 
                 'class_id':this.class_id, 'field':i}};
         }
         this.edit.deletePrimaryImage = function(fid) {
@@ -86,7 +86,7 @@ function ciniki_classes_class() {
         this.edit.addDropImage = function(iid) {
             if( M.ciniki_classes_class.edit.class_id > 0 ) {
                 var rsp = M.api.getJSON('ciniki.classes.classImageAdd', 
-                    {'business_id':M.curBusinessID, 'image_id':iid, 
+                    {'tnid':M.curTenantID, 'image_id':iid, 
                     'class_id':M.ciniki_classes_class.edit.class_id});
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
@@ -102,7 +102,7 @@ function ciniki_classes_class() {
                 // Save the class
                 var c = M.ciniki_classes_class.edit.serializeForm('yes');
                 c += '&images=' + iid;
-                var rsp = M.api.postJSON('ciniki.classes.classAdd', {'business_id':M.curBusinessID}, c);
+                var rsp = M.api.postJSON('ciniki.classes.classAdd', {'tnid':M.curTenantID}, c);
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -120,7 +120,7 @@ function ciniki_classes_class() {
         };
         this.edit.addDropImageRefresh = function() {
             if( M.ciniki_classes_class.edit.class_id > 0 ) {
-                var rsp = M.api.getJSONCb('ciniki.classes.classGet', {'business_id':M.curBusinessID, 
+                var rsp = M.api.getJSONCb('ciniki.classes.classGet', {'tnid':M.curTenantID, 
                     'class_id':M.ciniki_classes_class.edit.class_id, 'images':'yes'}, function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -165,11 +165,11 @@ function ciniki_classes_class() {
     this.editClass = function(cb, cid) {
         this.edit.reset();
         if( cid != null ) { this.edit.class_id = cid; }
-        this.edit.sections.details.fields.category.active = ((M.curBusiness.modules['ciniki.classes'].flags&0x01)>0)?'yes':'no';
-        this.edit.sections.details.fields.subcat.active = ((M.curBusiness.modules['ciniki.classes'].flags&0x02)>0)?'yes':'no';
+        this.edit.sections.details.fields.category.active = ((M.curTenant.modules['ciniki.classes'].flags&0x01)>0)?'yes':'no';
+        this.edit.sections.details.fields.subcat.active = ((M.curTenant.modules['ciniki.classes'].flags&0x02)>0)?'yes':'no';
         if( this.edit.class_id > 0 ) {
             this.edit.sections._buttons.buttons.delete.visible = 'yes';
-            M.api.getJSONCb('ciniki.classes.classGet', {'business_id':M.curBusinessID, 
+            M.api.getJSONCb('ciniki.classes.classGet', {'tnid':M.curTenantID, 
                 'class_id':this.edit.class_id, 'images':'yes', 'files':'yes'}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
@@ -194,7 +194,7 @@ function ciniki_classes_class() {
             var c = this.edit.serializeForm('no');
             if( c != '' ) {
                 M.api.postJSONCb('ciniki.classes.classUpdate', 
-                    {'business_id':M.curBusinessID, 'class_id':M.ciniki_classes_class.edit.class_id}, c,
+                    {'tnid':M.curTenantID, 'class_id':M.ciniki_classes_class.edit.class_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -213,7 +213,7 @@ function ciniki_classes_class() {
             }
             var c = this.edit.serializeForm('yes');
             M.api.postJSONCb('ciniki.classes.classAdd', 
-                {'business_id':M.curBusinessID}, c, function(rsp) {
+                {'tnid':M.curTenantID}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -234,7 +234,7 @@ function ciniki_classes_class() {
             }
             // Save the class
             var c = this.edit.serializeForm('yes');
-            M.api.postJSONCb('ciniki.classes.classAdd', {'business_id':M.curBusinessID}, c, function(rsp) {
+            M.api.postJSONCb('ciniki.classes.classAdd', {'tnid':M.curTenantID}, c, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -248,7 +248,7 @@ function ciniki_classes_class() {
     this.removeClass = function() {
         if( confirm("Are you sure you want to remove this class and all the images and files associated with it?") ) {
             M.api.getJSONCb('ciniki.classes.classDelete', 
-                {'business_id':M.curBusinessID, 'class_id':M.ciniki_classes_class.edit.class_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'class_id':M.ciniki_classes_class.edit.class_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;

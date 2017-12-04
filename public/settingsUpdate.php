@@ -22,7 +22,7 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -31,20 +31,20 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'classes', 'private', 'checkAccess');
-    $rc = ciniki_classes_checkAccess($ciniki, $args['business_id'], 'ciniki.classes.settingsUpdate'); 
+    $rc = ciniki_classes_checkAccess($ciniki, $args['tnid'], 'ciniki.classes.settingsUpdate'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
 
     //
-    // Grab the settings for the business from the database
+    // Grab the settings for the tenant from the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQuery');
     $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_class_settings', 
-        'business_id', $args['business_id'], 'ciniki.classes', 'settings', '');
+        'tnid', $args['tnid'], 'ciniki.classes', 'settings', '');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -75,9 +75,9 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
             // Add the settings if they don't already exist
             //
             if( !isset($settings[$field]) ) {
-                $strsql = "INSERT INTO ciniki_class_settings (business_id, detail_key, detail_value, "
+                $strsql = "INSERT INTO ciniki_class_settings (tnid, detail_key, detail_value, "
                     . "date_added, last_updated) "
-                    . "VALUES ('" . ciniki_core_dbQuote($ciniki, $ciniki['request']['args']['business_id']) . "'"
+                    . "VALUES ('" . ciniki_core_dbQuote($ciniki, $ciniki['request']['args']['tnid']) . "'"
                     . ", '" . ciniki_core_dbQuote($ciniki, $field) . "'"
                     . ", '" . ciniki_core_dbQuote($ciniki, $fvalue) . "'"
                     . ", UTC_TIMESTAMP(), UTC_TIMESTAMP()) "
@@ -88,7 +88,7 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
                     return $rc;
                 }
                 ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.classes', 'ciniki_class_history', 
-                    $args['business_id'], 1, 'ciniki_class_settings', $field, 'detail_value', $fvalue);
+                    $args['tnid'], 1, 'ciniki_class_settings', $field, 'detail_value', $fvalue);
                 $ciniki['syncqueue'][] = array('push'=>'ciniki.classes.setting', 
                     'args'=>array('id'=>$field));
             } 
@@ -100,7 +100,7 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
                     . "SET detail_value = '" . ciniki_core_dbQuote($ciniki, $fvalue) . "', "
                     . "last_updated = UTC_TIMESTAMP() "
                     . "WHERE detail_key = '" . ciniki_core_dbQuote($ciniki, $field) . "' "
-                    . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                    . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                     . "";
                 $rc = ciniki_core_dbUpdate($ciniki, $strsql, 'ciniki.classes');
                 if( $rc['stat'] != 'ok' ) {
@@ -108,7 +108,7 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
                     return $rc;
                 }
                 ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.classes', 'ciniki_class_history', 
-                    $args['business_id'], 2, 'ciniki_class_settings', $field, 'detail_value', $fvalue);
+                    $args['tnid'], 2, 'ciniki_class_settings', $field, 'detail_value', $fvalue);
                 $ciniki['syncqueue'][] = array('push'=>'ciniki.classes.setting', 
                     'args'=>array('id'=>$field));
             }
@@ -124,11 +124,11 @@ function ciniki_classes_settingsUpdate(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'classes');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'classes');
 
     return array('stat'=>'ok');
 }

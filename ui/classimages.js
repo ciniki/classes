@@ -38,7 +38,7 @@ function ciniki_classes_classimages() {
             return ''; 
         };
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.classes.classImageHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.classes.classImageHistory', 'args':{'tnid':M.curTenantID, 
                 'class_image_id':this.class_image_id, 'field':i}};
         };
         this.edit.addDropImage = function(iid) {
@@ -75,7 +75,7 @@ function ciniki_classes_classimages() {
         if( cid != null ) { this.edit.class_id = cid; }
         if( this.edit.class_image_id > 0 ) {
             var rsp = M.api.getJSONCb('ciniki.classes.classImageGet', 
-                {'business_id':M.curBusinessID, 'class_image_id':this.edit.class_image_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'class_image_id':this.edit.class_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -98,7 +98,7 @@ function ciniki_classes_classimages() {
             var c = this.edit.serializeFormData('no');
             if( c != '' ) {
                 M.api.postJSONFormData('ciniki.classes.classImageUpdate', 
-                    {'business_id':M.curBusinessID, 
+                    {'tnid':M.curTenantID, 
                     'class_image_id':this.edit.class_image_id}, c,
                         function(rsp) {
                             if( rsp.stat != 'ok' ) {
@@ -114,7 +114,7 @@ function ciniki_classes_classimages() {
         } else {
             var c = this.edit.serializeFormData('yes');
             M.api.postJSONFormData('ciniki.classes.classImageAdd', 
-                {'business_id':M.curBusinessID, 'class_id':this.edit.class_id}, c,
+                {'tnid':M.curTenantID, 'class_id':this.edit.class_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -128,7 +128,7 @@ function ciniki_classes_classimages() {
 
     this.deleteImage = function() {
         if( confirm('Are you sure you want to delete this image?') ) {
-            M.api.getJSONCb('ciniki.classes.classImageDelete', {'business_id':M.curBusinessID, 
+            M.api.getJSONCb('ciniki.classes.classImageDelete', {'tnid':M.curTenantID, 
                 'class_image_id':this.edit.class_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
