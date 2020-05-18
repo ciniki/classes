@@ -58,7 +58,7 @@ function ciniki_classes_classimages() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_classes_classimages', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 
@@ -127,15 +127,15 @@ function ciniki_classes_classimages() {
     };
 
     this.deleteImage = function() {
-        if( confirm('Are you sure you want to delete this image?') ) {
+        M.confirm('Are you sure you want to delete this image?',null,function() {
             M.api.getJSONCb('ciniki.classes.classImageDelete', {'tnid':M.curTenantID, 
-                'class_image_id':this.edit.class_image_id}, function(rsp) {
+                'class_image_id':M.ciniki_classes_classimages.edit.class_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
                     }
                     M.ciniki_classes_classimages.edit.close();
                 });
-        }
+        });
     };
 }

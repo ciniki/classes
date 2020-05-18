@@ -96,7 +96,7 @@ function ciniki_classes_class() {
             } else {
                 var name = M.ciniki_classes_class.edit.formValue('name');
                 if( name == '' ) {
-                    alert('You must enter the name of the class first');
+                    M.alert('You must enter the name of the class first');
                     return false;
                 }
                 // Save the class
@@ -155,7 +155,7 @@ function ciniki_classes_class() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_classes_class', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 
@@ -208,7 +208,7 @@ function ciniki_classes_class() {
         } else {
             var name = this.edit.formValue('name');
             if( name == '' ) {
-                alert('You must enter the name of the class first');
+                M.alert('You must enter the name of the class first');
                 return false;
             }
             var c = this.edit.serializeForm('yes');
@@ -229,7 +229,7 @@ function ciniki_classes_class() {
         } else {
             var name = this.edit.formValue('name');
             if( name == '' ) {
-                alert('You must enter the name of the class first');
+                M.alert('You must enter the name of the class first');
                 return false;
             }
             // Save the class
@@ -246,7 +246,7 @@ function ciniki_classes_class() {
     };
 
     this.removeClass = function() {
-        if( confirm("Are you sure you want to remove this class and all the images and files associated with it?") ) {
+        M.confirm("Are you sure you want to remove this class and all the images and files associated with it?",null,function() {
             M.api.getJSONCb('ciniki.classes.classDelete', 
                 {'tnid':M.curTenantID, 'class_id':M.ciniki_classes_class.edit.class_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
@@ -255,6 +255,6 @@ function ciniki_classes_class() {
                     }
                     M.ciniki_classes_class.edit.close();
                 });
-        }
+        });
     }
 };

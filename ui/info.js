@@ -35,7 +35,7 @@ function ciniki_classes_info() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_classes_info', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 
