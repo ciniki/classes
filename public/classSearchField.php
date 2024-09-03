@@ -76,7 +76,7 @@ function ciniki_classes_classSearchField($ciniki) {
             . "AND " . $args['field'] . " <> '' "
             . ") "
         . "";
-    $strsql .= "ORDER BY " . $args['field'] . " COLLATE latin1_general_cs "
+    $strsql .= "ORDER BY " . $args['field'] . " "
         . "";
     if( isset($args['limit']) && $args['limit'] != '' && $args['limit'] > 0 ) {
         $strsql .= "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " ";
